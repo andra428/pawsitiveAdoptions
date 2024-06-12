@@ -1,0 +1,185 @@
+{% extends "home.html" %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+  
+</head>
+<body>
+  
+{% block content %}
+    
+    <main>
+    <div class="leftbar">
+        <h3>Search for the perfect pet:</h3>
+        <form method="post" action="{% url 'findPets' %}">
+         <div class="form-group">
+        <label class="label" for="animal_search"> Animal:</label>
+        <div class="custom-select" style="width:150px;">
+        <select id="animal_search" name="animal_search">
+            <option value="">Select</option>
+            <option value="Dog">Dog</option>
+            <option  value="Cat">Cat</option>
+        </select>
+    </div>
+    </div>
+        <br>
+        
+        <label class="label" for="breed">Breed: </label>
+        <input type="text" id="breed" name="breed">
+        <br>
+        <div class="form-group">
+        <label class="label" for="size"> Size:</label>
+        <div class="custom-select" style="width:150px;">
+        <select id="size" name="size">
+            <option value="">Select</option>
+            <option value="Small">Small</option>
+            <option  value="Medium">Medium</option>
+            <option  value="Large">Large</option>
+        </select>
+        </div>
+        </div>
+        <br>
+        <div class="form-group">
+        <label class="label" for="gender"> Gender:</label>
+        <div class="custom-select" style="width:150px;">
+        <select id="gender" name="gender">
+            <option value="">Select</option>
+            <option  value="Female">Female</option>
+            <option  value="Male">Male</option>
+        </select>
+        </div>
+        </div>
+        <br>
+        <div class="form-group">
+        <label class="label" for="age"> Age:</label>
+        <input type="number" id="age" name="age" min="1">
+        <div class="custom-select" style="width:150px;">
+        <select id="type_age" name="type_age">
+            <option value="">Select</option>
+            <option  value="Weeks">Weeks</option>
+            <option  value="Months">Months</option>
+            <option  value="Years">Years</option>
+        </select>
+    </div>
+    </div>
+    <label class="label">Details: </label>
+    <input type="checkbox" id="d1" name="details" value="Good with other animals">
+    <label class="label" for="d1"> Good with other animals</label><br>
+    <input type="checkbox" id="d2" name="details" value="Good with kids">
+    <label class="label" for="d2"> Good with kids</label><br>
+    <input type="checkbox" id="d3" name="details" value="Poty trained">
+    <label class="label" for="d3"> Poty trained</label>
+    <input type="checkbox" id="d4" name="details" value="Active">
+    <label class="label" for="d4"> Active</label>
+    <input type="checkbox" id="d5" name="details" value="Does not shed much">
+    <label class="label" for="d5"> Does not shed much</label>
+
+        <br><br><br>
+        <button type="submit" class="button2">Find my pet!</button>
+        <br>
+    </form> 
+    </div>
+   
+   
+    {% if pets %}
+    <div class="rightbar">
+        <ul class="ul_eu">
+        {% for pet in pets %}
+            {% if not pet.adopted %}
+                <li class="li_eu">
+                    <a href="{% url 'details' idAnimal=pet.id %}">
+                    <img class="imgg" src="{{ pet.path.url }}" width="200" height="225" alt="{{ pet.name }}">
+                    </a>
+                    <p> {{ pet.name }}</p>
+                </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        
+        {% endif %}
+    </div>
+    <h2 class="pp"> {{ mesaj }} </h2>
+    <br>
+    </main>
+    <br> <br>
+    <script>
+        var x, i, j, l, ll, selElmnt, a, b, c;
+        x = document.getElementsByClassName("custom-select");
+        l = x.length;
+        for (i = 0; i < l; i++) {
+          selElmnt = x[i].getElementsByTagName("select")[0];
+          ll = selElmnt.length;
+          a = document.createElement("DIV");
+          a.setAttribute("class", "select-selected");
+          a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+          x[i].appendChild(a);
+          b = document.createElement("DIV");
+          b.setAttribute("class", "select-items select-hide");
+          for (j = 1; j < ll; j++) {
+          
+            c = document.createElement("DIV");
+            c.innerHTML = selElmnt.options[j].innerHTML;
+            c.addEventListener("click", function(e) {
+               
+                var y, i, k, s, h, sl, yl;
+                s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                sl = s.length;
+                h = this.parentNode.previousSibling;
+                for (i = 0; i < sl; i++) {
+                  if (s.options[i].innerHTML == this.innerHTML) {
+                    s.selectedIndex = i;
+                    h.innerHTML = this.innerHTML;
+                    y = this.parentNode.getElementsByClassName("same-as-selected");
+                    yl = y.length;
+                    for (k = 0; k < yl; k++) {
+                      y[k].removeAttribute("class");
+                    }
+                    this.setAttribute("class", "same-as-selected");
+                    break;
+                  }
+                }
+                h.click();
+            });
+            b.appendChild(c);
+          }
+          x[i].appendChild(b);
+          a.addEventListener("click", function(e) {
+             
+              e.stopPropagation();
+              closeAllSelect(this);
+              this.nextSibling.classList.toggle("select-hide");
+              this.classList.toggle("select-arrow-active");
+            });
+        }
+        function closeAllSelect(elmnt) {
+        
+          var x, y, i, xl, yl, arrNo = [];
+          x = document.getElementsByClassName("select-items");
+          y = document.getElementsByClassName("select-selected");
+          xl = x.length;
+          yl = y.length;
+          for (i = 0; i < yl; i++) {
+            if (elmnt == y[i]) {
+              arrNo.push(i)
+            } else {
+              y[i].classList.remove("select-arrow-active");
+            }
+          }
+          for (i = 0; i < xl; i++) {
+            if (arrNo.indexOf(i)) {
+              x[i].classList.add("select-hide");
+            }
+          }
+        }
+        
+        document.addEventListener("click", closeAllSelect);
+        </script>
+{% endblock %}
+
+</body>
+</html>

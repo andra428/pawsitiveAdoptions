@@ -1,0 +1,47 @@
+{% extends "home.html" %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+   
+</head>
+<body>
+  
+{% block content %}
+    
+    <main>
+        <ol>
+            <li>
+                <p>
+                    The adoption process begins with interested individuals filling out a form where they express their preferences and desires regarding the type of pet that they would like.
+                </p>
+            </li>
+            <li>
+                <p>
+                    Based on this information, compatible animals will be presented to them, from which they can choose one to visit and get to know personally.
+                </p>
+            </li>
+            <li>
+                <p>
+                    After selection, a meeting is scheduled to meet the chosen animal. 
+                </p>
+            </li>
+            <li>
+                <p>
+                    The moment of the in-person meeting is crucial in the adoption decision, providing the user with the opportunity to make an informed and conscious decision regarding their new companion.
+                </p>
+            </li>
+        </ol>
+             
+        <img class="imgg3" src="/static/images/procces.png" alt="proces">
+   
+    </main>
+
+{% endblock %}
+
+</body>
+</html>

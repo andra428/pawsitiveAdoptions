@@ -1,0 +1,254 @@
+{% extends "home.html" %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+  
+</head>
+<body>
+  
+{% block content %}
+    
+    <main>
+    <div class="middlebarSignup">
+      <h3>{{ mesajj }}</h3>
+        <h3>Create an account:</h3>
+        <form method="post" action="{% url 'createUserAdoptator' %}">
+            {% csrf_token %}
+            <br>
+
+            <div class="form-group">
+                <label class="label" for="lastname">Last name: </label>
+                <input type="text" id="lastname" name="lastname"><br>
+            </div>
+            <div class="form-group">
+                <label class="label" for="firstname">First name: </label>
+                <input type="text" id="firstname" name="firstname"><br>
+            </div>
+            <div class="form-group">
+                <label class="label" for="email">Email: </label>
+                <input type="email" id="email" name="email" pattern="[a-zA-Z0-9._%+-]+@gmail\.com$"
+                 title="name@gmail.com" required><br>
+            </div>
+            <div class="form-group">
+                <label class="label" for="phone">Phone number: </label>
+                <input type="text" id="phone" name="phone"><br>
+            </div>
+            <div class="form-group">
+                <label class="label" for="password">Password: </label>
+                <input type="password" id="password" name="password">
+            </div>
+
+            <label class="label">What do you want from this app: </label><br>
+            <input type="radio" id="adopt" name="adopt" value="Adopt" onclick="toggleFields('adopt_fields', 'adopt_fields2')">
+            <label class="label" for="adopt"> Adopt</label><br>
+            <input type="radio" id="give_to_adoption" name="adopt" value="Give to adoption" onclick="toggleFields('adopt_fields2', 'adopt_fields')">
+            <label class="label" for="give_to_adoption"> Give to adoption</label><br><br>
+
+        <div id="adopt_fields2" style="display: none;">
+          <label class="label" for="address">Address: </label>
+          <input type="text" id="address" name="address" value="IS">  
+        </div>
+
+        <div id="adopt_fields" style="display: none;">  
+        
+        <div class="form-group">
+        <label class="label" for="animal"> Animal:</label>
+        <div class="custom-select" style="width:150px;">
+        <select id="animal" name="animal">
+            <option value="">Select</option>
+            <option value="Dog">Dog</option>
+            <option  value="Cat">Cat</option>
+        </select>
+        </div>
+        </div>
+        <br>
+        
+        <label class="label" for="race">Breed: </label>
+        <input type="text" id="race" name="race" value="Open to any breed">
+       
+        <br>
+        
+        <div class="form-group">
+        <label class="label" for="size"> Size:</label>
+        <div class="custom-select" style="width:150px;">
+        <select id="size" name="size">
+            <option value="">Select</option>
+            <option value="Small">Small</option>
+            <option  value="Medium">Medium</option>
+            <option  value="Large">Large</option>
+        </select>
+        </div>
+        </div>
+      
+        <br>
+        
+        <div class="form-group">
+            <label class="label" for="hair"> Hair:</label>
+            <div class="custom-select" style="width:150px;">
+            <select id="hair" name="hair">
+                <option value="">Select</option>
+                <option  value="Short coat">Short coat</option>
+                <option  value="Long coat">Long coat</option>
+            </select>
+            </div>
+            </div>
+        
+            <br>
+       
+        <div class="form-group">
+        <label class="label" for="gender"> Gender:</label>
+        <div class="custom-select" style="width:150px;">
+        <select id="gender" name="gender">
+            <option value="">Select</option>
+            <option  value="Female">Female</option>
+            <option  value="Male">Male</option>
+        </select>
+        </div>
+        </div>
+       
+        <br>
+        
+        <div class="form-group">
+        <label class="label" for="age"> Age:</label>
+        <input type="number" id="age" name="age" min="1">
+        <div class="custom-select" style="width:150px;">
+        <select id="type_age" name="type_age">
+            <option value="">Select</option>
+            <option  value="Weeks">Weeks</option>
+            <option  value="Months">Months</option>
+            <option  value="Years">Years</option>
+        </select>
+    </div>
+    </div>
+  
+    <label class="label">Housing environment: </label><br>
+    <input type="checkbox" id="h1" name="housing" value="Apartament">
+    <label class="label" for="h1"> Apartament </label><br>
+    <input type="checkbox" id="h2" name="housing" value="House">
+    <label class="label" for="h2"> House</label><br>
+    <input type="checkbox" id="h3" name="housing" value="Courtyard">
+    <label class="label" for="h3"> Courtyard</label>
+    <br><br>
+
+    <label class="label">Experience and history: </label><br>
+    <input type="checkbox" id="eh1" name="exp_his" value="Had cats">
+    <label class="label" for="eh1"> Had cats </label><br>
+    <input type="checkbox" id="eh2" name="exp_his" value="Had dogs">
+    <label class="label" for="eh2"> Had dogs</label><br>
+    <input type="checkbox" id="eh3" name="exp_his" value="I have dogs">
+    <label class="label" for="eh3"> I have dogs</label>
+    <input type="checkbox" id="eh4" name="exp_his" value="I have cats">
+    <label class="label" for="eh4"> I have cats</label>
+    <br><br>
+
+    <label class="label">Description: </label><br>
+    <input type="checkbox" id="dd1" name="description" value="Good with other animals">
+    <label class="label" for="dd1"> Good with other animals</label><br>
+    <input type="checkbox" id="dd2" name="description" value="Good with kids">
+    <label class="label" for="dd2"> Good with kids</label><br>
+    <input type="checkbox" id="dd3" name="description" value="Poty trained">
+    <label class="label" for="dd3"> Poty trained</label>
+    <input type="checkbox" id="dd4" name="description" value="Active">
+    <label class="label" for="dd4"> Active</label>
+    <input type="checkbox" id="dd5" name="description" value="Does not shed much">
+    <label class="label" for="dd5"> Does not shed much</label>
+    </div>
+        <br><br><br>
+        <button type="submit" class="button2">Create account</button>
+        <br>
+    </form> 
+    </div>
+   
+    <br>
+    </main>
+    <br> <br>
+    <script>
+        var x, i, j, l, ll, selElmnt, a, b, c;
+        x = document.getElementsByClassName("custom-select");
+        l = x.length;
+        for (i = 0; i < l; i++) {
+          selElmnt = x[i].getElementsByTagName("select")[0];
+          ll = selElmnt.length;
+          a = document.createElement("DIV");
+          a.setAttribute("class", "select-selected");
+          a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+          x[i].appendChild(a);
+          b = document.createElement("DIV");
+          b.setAttribute("class", "select-items select-hide");
+          for (j = 1; j < ll; j++) {
+          
+            c = document.createElement("DIV");
+            c.innerHTML = selElmnt.options[j].innerHTML;
+            c.addEventListener("click", function(e) {
+               
+                var y, i, k, s, h, sl, yl;
+                s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                sl = s.length;
+                h = this.parentNode.previousSibling;
+                for (i = 0; i < sl; i++) {
+                  if (s.options[i].innerHTML == this.innerHTML) {
+                    s.selectedIndex = i;
+                    h.innerHTML = this.innerHTML;
+                    y = this.parentNode.getElementsByClassName("same-as-selected");
+                    yl = y.length;
+                    for (k = 0; k < yl; k++) {
+                      y[k].removeAttribute("class");
+                    }
+                    this.setAttribute("class", "same-as-selected");
+                    break;
+                  }
+                }
+                h.click();
+            });
+            b.appendChild(c);
+          }
+          x[i].appendChild(b);
+          a.addEventListener("click", function(e) {
+             
+              e.stopPropagation();
+              closeAllSelect(this);
+              this.nextSibling.classList.toggle("select-hide");
+              this.classList.toggle("select-arrow-active");
+            });
+        }
+        function closeAllSelect(elmnt) {
+        
+          var x, y, i, xl, yl, arrNo = [];
+          x = document.getElementsByClassName("select-items");
+          y = document.getElementsByClassName("select-selected");
+          xl = x.length;
+          yl = y.length;
+          for (i = 0; i < yl; i++) {
+            if (elmnt == y[i]) {
+              arrNo.push(i)
+            } else {
+              y[i].classList.remove("select-arrow-active");
+            }
+          }
+          for (i = 0; i < xl; i++) {
+            if (arrNo.indexOf(i)) {
+              x[i].classList.add("select-hide");
+            }
+          }
+        }
+        
+        document.addEventListener("click", closeAllSelect);
+
+       
+   function toggleFields(selectedId, hiddenId) {
+            var selectedFields = document.getElementById(selectedId);
+            var hiddenFields = document.getElementById(hiddenId);
+
+            selectedFields.style.display = "block";
+            hiddenFields.style.display = "none";
+        }
+        </script>
+{% endblock %}
+
+</body>
+</html>

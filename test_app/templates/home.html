@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}" >
+    <script src="{% static 'js/script.js' %}"></script>
+    <title>Pawsitive Adoptions</title>
+</head>
+<body>
+    
+    <nav>
+        <a href="{% url 'home' %}">
+            <img  class="logo" src="/static/images/logo.png" alt="logo"  width="45px" height="50px">
+        </a>
+        <ul>
+            
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'petfinderArticlesDogs' %}"> Dog articles</a></li>
+            <li><a href="{% url 'petfinderArticlesCats' %}"> Cat articles</a></li>
+            <li><a href="{% url 'mapView' %}">Map</a></li>
+            <div class="dropdown">
+            <li>
+            <span>About</span>
+                <div class="dropdown-content">
+                    <a href="{% url 'about' %}">The adoption process</a>
+                    <a href="{% url 'aboutGiving' %}">Giving up for adoption process</a>
+                </div>
+            </div>
+        </li>
+            <li><a href="{% url 'search_pets' %}">Search pets</a></li>
+            <li class="align_right">
+                <div class="dropdown">
+                    <a href="{% url 'accountView' %}">
+                        {% if user.is_authenticated %}
+                        <p style="display: inline;">{{ user.first_name }}</p>
+                        {% else %}
+                        <img src="{% static 'images/account2.png' %}" width="45px" height="45px" alt="Account">
+                        {% endif %}
+                </a>
+                <div class="dropdown-content2">
+                    <a href="{% url 'signup' %}">Sign up</a>
+                    <a href="{% url 'loginPagina' %}">Log in</a>
+                    <a href="{% url 'logout_view' %}">Log out</a>
+                </div>
+            </div>
+            </li>
+        </ul>
+    </nav>
+    
+    <main>
+        {% block content %}
+      
+        {% if page_obj.has_other_pages %}
+        <ul class="ul_eu">
+            {% for pet in page_obj %}
+            {% if not pet.adopted %}
+                <li class="li_eu">
+                    <a href="{% url 'details' idAnimal=pet.id %}">
+                    <img class="imgg" src="{{ pet.path.url }}" width="200" height="225" alt="{{ pet.name }}">
+                    </a>
+                    <p> {{ pet.name }}</p>
+                    
+                </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1"> &laquo; First</a>
+                    <a href="?page={{ page_obj.previous_page_number }}"> &lt; Previous</a>
+                {% endif %}
+        
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+        
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Next &gt;</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+        {% else %}
+            <p>No available pets at the moment</p>
+        {% endif %}
+        {% endblock %}
+
+    </main>
+
+  <footer>
+    <img src="/static/images/paws5.png" alt="'footer">
+  </footer>
+</body>
+</html>

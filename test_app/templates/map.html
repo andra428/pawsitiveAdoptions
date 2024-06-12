@@ -1,0 +1,208 @@
+{% extends "home.html" %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+</head>
+<body>
+  
+{% block content %}
+   
+
+<div>
+    <br>
+    <label class="label" for="cityInput">City:</label>
+    <input type="text" id="cityInput" placeholder="Ex: Iași">
+    
+    <label class="label" for="smth"> What are you looking for:</label>
+    <div class="custom-select" style="width:150px;">
+    <select id="categorySelect" name="categorySelect">
+        <option value="">Select</option>
+        <option value="veterinar">Veterinary clinics</option>
+        <option value="animal_shelter">Shelters</option>
+    </select>
+    </div>
+
+    <button onclick="searchByCity()">Search</button>
+</div>
+
+<div id="map" style="height: 500px; width: 100%;"></div>
+
+<script>
+    let map;
+
+    function createMarker(place) {
+        if (map) {
+            const marker = new google.maps.Marker({
+                map: map,
+                position: place.geometry.location,
+                title: place.name
+            });
+
+            const infowindow = new google.maps.InfoWindow({
+                content: `
+                    <div>
+                        <strong>${place.name}</strong><br>
+                        ${place.vicinity}<br>
+                        
+                    </div>
+                `
+            });
+
+            marker.addListener('click', () => {
+                infowindow.open(map, marker);
+            });
+        } else {
+            console.error('Map is not defined.');
+        }
+    }
+
+    function getNearbyPlaces(location) {
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: location,
+        zoom: 12,
+        mapTypeId: 'roadmap',
+    });
+
+    const service = new google.maps.places.PlacesService(map);
+    const categorySelect = document.getElementById("categorySelect");
+    const selectedCategory = categorySelect.value;
+
+    service.nearbySearch({
+        location: location,
+        radius: 10000,
+        keyword: selectedCategory
+    }, (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            for (let i = 0; i < results.length; i++) {
+                createMarker(results[i]);
+            }
+        } else {
+            console.error('Places Service failed due to:', status);
+        }
+    });
+}
+
+
+    function initMap() {
+        if (typeof navigator !== 'undefined' && navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                getNearbyPlaces(userLocation);
+            }, () => {
+                console.error('Geolocation failed. Defaulting to a default location.');
+                const defaultLocation = { lat: 47.1585, lng: 27.6014 };
+                getNearbyPlaces(defaultLocation);
+            });
+        } else {
+            console.error('Geolocation is not supported by this browser. Defaulting to a default location.');
+            const defaultLocation = { lat: 47.1585, lng: 27.6014 };
+            getNearbyPlaces(defaultLocation);
+        }
+    }
+
+    function searchByCity() {
+        const city = document.getElementById('cityInput').value;
+        if (city.trim() !== '') {
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ address: city }, (results, status) => {
+                if (status === 'OK' && results && results.length > 0) {
+                    const location = {
+                        lat: results[0].geometry.location.lat(),
+                        lng: results[0].geometry.location.lng()
+                    };
+                    getNearbyPlaces(location);
+                } else {
+                    console.error('Geocode failed. Please enter a valid city.');
+                }
+            });
+        } else {
+            console.error('Please enter a city.');
+        }
+    }
+
+    var x, i, j, l, ll, selElmnt, a, b, c;
+        x = document.getElementsByClassName("custom-select");
+        l = x.length;
+        for (i = 0; i < l; i++) {
+          selElmnt = x[i].getElementsByTagName("select")[0];
+          ll = selElmnt.length;
+          a = document.createElement("DIV");
+          a.setAttribute("class", "select-selected");
+          a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+          x[i].appendChild(a);
+          b = document.createElement("DIV");
+          b.setAttribute("class", "select-items select-hide");
+          for (j = 1; j < ll; j++) {
+          
+            c = document.createElement("DIV");
+            c.innerHTML = selElmnt.options[j].innerHTML;
+            c.addEventListener("click", function(e) {
+               
+                var y, i, k, s, h, sl, yl;
+                s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                sl = s.length;
+                h = this.parentNode.previousSibling;
+                for (i = 0; i < sl; i++) {
+                  if (s.options[i].innerHTML == this.innerHTML) {
+                    s.selectedIndex = i;
+                    h.innerHTML = this.innerHTML;
+                    y = this.parentNode.getElementsByClassName("same-as-selected");
+                    yl = y.length;
+                    for (k = 0; k < yl; k++) {
+                      y[k].removeAttribute("class");
+                    }
+                    this.setAttribute("class", "same-as-selected");
+                    break;
+                  }
+                }
+                h.click();
+            });
+            b.appendChild(c);
+          }
+          x[i].appendChild(b);
+          a.addEventListener("click", function(e) {
+             
+              e.stopPropagation();
+              closeAllSelect(this);
+              this.nextSibling.classList.toggle("select-hide");
+              this.classList.toggle("select-arrow-active");
+            });
+        }
+        function closeAllSelect(elmnt) {
+        
+          var x, y, i, xl, yl, arrNo = [];
+          x = document.getElementsByClassName("select-items");
+          y = document.getElementsByClassName("select-selected");
+          xl = x.length;
+          yl = y.length;
+          for (i = 0; i < yl; i++) {
+            if (elmnt == y[i]) {
+              arrNo.push(i)
+            } else {
+              y[i].classList.remove("select-arrow-active");
+            }
+          }
+          for (i = 0; i < xl; i++) {
+            if (arrNo.indexOf(i)) {
+              x[i].classList.add("select-hide");
+            }
+          }
+        }
+        
+        document.addEventListener("click", closeAllSelect);
+        
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key={{ key }}&callback=initMap&libraries=places&v=weekly" async defer></script>
+{% endblock %}
+</body>
+</html>

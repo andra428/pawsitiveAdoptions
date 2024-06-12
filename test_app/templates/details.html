@@ -1,0 +1,88 @@
+{% extends "home.html" %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+    
+  
+</head>
+<body>
+  
+{% block content %}
+    
+    <main>
+        {% if pets %}
+    
+           
+            <div class="pet-details">
+            <img class="imgg2" src="{{ pets.path.url }}" width="400" height="450" alt="{{ pets.name }}">
+            <div class="middlebar">
+            <table>
+                <tr>
+                    <td class="td1">Name:</td>
+                    <td class="td2">{{ pets.name }}</td>
+                </tr>
+                <tr>
+                    <td class="td1">Age:</td>
+                    <td class="td2">{{ pets.age }} {{ pets.type_age }}</td>
+                </tr>
+                <tr>
+                    <td class="td1">Size:</td>
+                    <td class="td2">{{ pets.size }}</td>
+                </tr>
+                <tr>
+                    <td class="td1">Weight:</td>
+                    <td class="td2">{{ pets.weight }} kg</td>
+                </tr>
+                <tr>
+                    <td class="td1">Gender:</td>
+                    <td class="td2">{{ pets.gender }}</td>
+                </tr>
+                <tr>
+                    <td class="td1">Breed:</td>
+                    <td class="td2">{{ pets.race }}</td>
+                </tr>
+               
+                <tr>
+                    <td class="td1">Coat:</td>
+                    <td class="td2">{{ pets.hair }}</td>
+                </tr>
+                <tr>
+                    <td class="td1">Description:</td>
+                    <td class="td2">{{ pets.description }}</td>
+                </tr>
+                {% if hasOwner == 1 %}
+                <tr>
+                    <td class="td1">Owner contact information</td>
+                    <td class="td2">
+                        <p>{{ ownerLastName }} {{ ownerFirstName }}</p>
+                        <p>{{ ownerPhone }}</p>
+                        <p>{{ ownerEmail }} </p>
+                    </td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+        <div class="sidebar">
+          
+            <form action="{% url 'considerForAdoptionView' idAnimal=pets.id %}">
+            <h2>Considering for adoption?</h2>
+            <button>Check if it's a match!</button>
+        </form>
+        </div>
+            
+        
+        {% else %}
+            <p>No avaible pets at the moment</p>
+        {% endif %}
+    </main>
+
+{% endblock %}
+
+</body>
+</html>

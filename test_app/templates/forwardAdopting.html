@@ -1,0 +1,56 @@
+{% extends "home.html" %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+  
+</head>
+<body>
+  
+{% block content %}
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        let today = new Date();
+        today.setDate(today.getDate() + 1);
+
+        let year = today.getFullYear();
+        let month = (today.getMonth() + 1).toString().padStart(2, '0');
+        let day = today.getDate().toString().padStart(2, '0');
+
+        let minDate = `${year}-${month}-${day}`;
+
+        document.getElementById('endDate').setAttribute('min', minDate);
+    });
+</script>
+    <main>
+    <div class="center">
+        <h1>{{ mesaj }}</h1>
+        {% if check == 1%}
+         <div class="middlebarAdopt">
+        <form action="{% url 'contactOwner' idAnimal=idAnimal %}" method="post">
+            {% csrf_token %}
+            
+            <label for="email_message">Include a date/time when you are available:</label><br><br>
+            
+            <label for="endDate">Date</label>
+            <input type="date" id="endDate" name="endDate"><br>
+            <label for="endTime">Time</label>
+            <input type="time" id="startTime" name="startTime">
+            <input type="time" id="endTime" name="endTime">
+           <p>The place where the meeting will most likely take place </p>
+           <p><strong>{{ address }}</strong></p>
+            <button type="submit" class="button2">Send message</button>
+        </form>
+    </div>   
+        {% endif %}
+    </div>  
+    </main>
+    <br> <br>
+{% endblock %}
+
+</body>
+</html>

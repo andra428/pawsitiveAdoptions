@@ -1,0 +1,44 @@
+{% extends "home.html" %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+
+  
+</head>
+<body>
+  
+{% block content %}
+    
+    <main>
+        <ol>
+            <li>
+                <p>
+                    The adoption process involves completing a detailed form about the animal and uploading a photo to the adoption website to be included in the database.
+                </p>
+            </li>
+            <li>
+                <p>
+                    After this, the animal's owner must wait for an interested user to select the animal, at which point a meeting will be scheduled. 
+                </p>
+            </li>
+            <li>
+                <p>
+                    During the meeting, the owner will introduce the animal to the potential adopter in person, allowing them to make an informed and conscious decision about the adoption.
+                </p>
+            </li>
+            
+        </ol>
+             
+        <img class="imgg3" src="/static/images/proces2.png" alt="proces">
+   
+    </main>
+
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% extends "home.html" %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+    
+  
+</head>
+<body>
+  
+{% block content %}
+    
+<div class="grid-container">
+<div class="leftbarArticle">
+    <h2>Health and Wellness</h2>
+    {% for article in articles %}
+    
+    <h3><a class="aLink" href="{% url 'viewArticle' link=article.link %}">{{ article.title }}</a></h3>
+        
+    {% endfor %}
+</div>
+
+<div class="rightbarArticle">
+    <h2>Behavior</h2>
+    {% for article in articles23 %}
+    
+    <h3><a class="aLink" href="{% url 'viewArticle' link=article.link %}">{{ article.title }}</a></h3>
+  
+    {% endfor %}
+</div>
+
+<div class="rightbarArticle">
+    <h2>Food</h2>
+    {% for article in articles33 %}
+    
+    <h3><a class="aLink" href="{% url 'viewArticle' link=article.link %}">{{ article.title }}</a></h3>
+    {% endfor %}
+</div>
+
+</div>
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,678 @@
+{% extends "home.html" %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+  
+</head>
+<body>
+  
+{% block content %}
+    
+    <main>
+         
+    <div class="leftbar">
+       {% if user.is_authenticated %}
+       <li>
+       <form method="post" action="{% url 'updatePersonalInfoView' %}">
+        {% csrf_token %}
+        <button class="button3">Update personal information</button>   
+        </form>
+        </li>
+        {% if user.role == 1  %}
+        <li>
+            <form action="{% url 'updateAnimalPreferencesView' %}" method="post">
+                {% csrf_token %}
+            <button class="button3">Update animal preferences</button>
+            </form>
+        </li>
+            <li>
+            <form action="{% url 'showCompatibleAnimals' %}" method="post">
+                {% csrf_token %}
+            <button class="button3">Show compatible animals</button>
+            </form>
+            </li>
+            <li>
+            <form action="{% url 'showAnimalsMessagesAdoptator' %}" method="post">
+              {% csrf_token %}
+            <button class="button3">Messages</button>
+            </form>
+          </li>
+        {% else %}
+          <form action="{% url 'postAnAnnouncementView' %}" method="post">
+            {% csrf_token %}
+            <li><button class="button3">Post an anouncement</button>  </li>
+          </form>
+            
+            <form action="{% url 'showAnimals' %}" method="post">
+              {% csrf_token %}
+            <li><button class="button3">Update information about the pets</button>  </li>
+            </form>
+
+            <form action="{% url 'showAnimalsMessagesGiveToAdopt' %}" method="post">
+              {% csrf_token %}
+            <li><button class="button3">Messages</button>  </li>
+            </form>
+            
+            {% endif %}
+        {% endif %}
+    </div>
+  
+    {% if sam == 1 %}
+    {% if lung1 > 0 %}
+    
+    <div class="rightbar">
+      <ul class="ul_eu">
+      {% for pet, c in adoptatori %}
+          {% if not pet.idAnimal.adopted %}
+              <li class="li_eu">
+                  <a href="{% url 'convoAdoptator' idAnimal=pet.idAnimal.id %}">
+                    <div class="img-container">
+                    {% if c == 0%}
+                    <span class="icon"></span>
+                    <img class="imggM" src="{{ pet.idAnimal.path.url }}" width="200" height="225" alt="{{ pet.idAnimal.name }}">
+                  
+                  {% else %}
+                  <img class="imgg" src="{{ pet.idAnimal.path.url }}" width="200" height="225" alt="{{ pet.idAnimal.name }}">
+                  {% endif %}
+                  
+                    </div>
+                  </a>
+                  <p> {{ pet.idAnimal.name }}</p>
+              </li>
+          {% endif %}
+          {% endfor %}
+      </ul>
+    </div>
+      {% else %}
+        {% if mesaj3 %}
+          {% if mesaj3.strip %}
+            <h2 class="pp"> {{ mesaj3 }} </h2>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+      {% endif %}
+
+  {% if sam == 2 %}    
+  {% if lung2 > 0 %}
+    
+    <div class="rightbar">
+      <ul class="ul_eu">
+        
+      {% for pet, c in animals %}
+          {% if not pet.idle.adopted %}
+              <li class="li_eu">
+                  <a href="{% url 'convoAdoptator' idAnimal=pet.idle.id %}">
+                    <div class="img-container">
+                    {% if c == 0%}
+                    <span class="icon"></span>
+                  <img class="imggM" src="{{ pet.idle.path.url }}" width="200" height="225" alt="{{ pet.idle.name }}">
+                  {% else %}
+                  <img class="imgg" src="{{ pet.idle.path.url }}" width="200" height="225" alt="{{ pet.idle.name }}">
+                  {% endif %}
+                  
+                </div>
+                  </a>
+                  <p> {{ pet.idle.name }}</p>
+              </li>
+          {% endif %}
+          {% endfor %}
+      </ul>
+    </div>
+      {% else %}
+        {% if mesaj3 %}
+          {% if mesaj3.strip %}
+            <h2 class="pp"> {{ mesaj3 }} </h2>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+      {% endif %}
+
+    {% if pets %}
+
+    <div class="rightbar">
+        <ul class="ul_eu">
+        {% for pet in pets %}
+            {% if not pet.adopted %}
+                <li class="li_eu">
+                    <a href="{% url 'details' idAnimal=pet.id %}">
+                    <img class="imgg" src="{{ pet.path.url }}" width="200" height="225" alt="{{ pet.name }}">
+                    </a>
+                    <p> {{ pet.name }}</p>
+                </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+      </div>
+        {% else %}
+          {% if mesaj %}
+            {% if mesaj.strip %}
+              <h2 class="pp"> {{ mesaj }} </h2>
+            {% endif %}
+          {% endif %}
+        {% endif %}
+    
+
+    {% if user_animals %}
+    <div class="rightbar">
+        <ul class="ul_eu">
+        {% for pet in user_animals %}
+           
+              <li class="li_eu">
+                  <a href="{% url 'updateAnimalInfoView' idAnimal=pet.id %}">
+                    {% if pet.adopted == 1 %}
+                  <img class="imggM" src="{{ pet.path.url }}" width="200" height="225" alt="{{ pet.name }}">
+                  {% else %}
+                  <img class="imggA" src="{{ pet.path.url }}" width="200" height="225" alt="{{ pet.name }}">
+                  {% endif %}
+                  </a>
+                  <p> {{ pet.name }}</p>
+              </li>
+           
+            {% endfor %}
+        </ul>
+      </div>
+        {% else %}
+          {% if mesaj2 %}
+            {% if mesaj2.strip %}
+              <h2 class="pp"> {{ mesaj2 }} </h2>
+            {% endif %}
+          {% endif %}
+        {% endif %}
+
+    {% if uap == 1%}
+    <div class="rightbar">
+        <form method="post" action="{% url 'updateAnimalPreferences' %}">
+          {% csrf_token %}
+        <h3>Update animal preferences</h3>
+        <div class="form-group">
+            <label class="label" for="animal2"> Animal:</label>
+            <div class="custom-select" style="width:150px;">
+            <select id="animal2" name="animal2">
+                <option value="{{ animal }}"> {{ animal }}</option>
+                <option value="Dog">Dog</option>
+                <option  value="Cat">Cat</option>
+            </select>
+        </div>
+        </div>
+            <br>
+            <label class="label" for="breed2">Breed: </label>
+            <input type="text" id="breed2" name="breed2" value="{{ race }}">
+            <br>
+            <div class="form-group">
+            <label class="label" for="size2"> Size:</label>
+            <div class="custom-select" style="width:150px;">
+            <select id="size2" name="size2">
+                <option value="{{ size }}">{{ size }}</option>
+                <option value="Small">Small</option>
+                <option  value="Medium">Medium</option>
+                <option  value="Large">Large</option>
+                <option  value="No preferences">No preferences</option>
+            </select>
+            </div>
+            </div>
+            <br>
+            <div class="form-group">
+              <label class="label" for="hair2"> Hair:</label>
+              <div class="custom-select" style="width:150px;">
+              <select id="hair2" name="hair2">
+                  <option value="{{ hair }}">{{ hair }}</option>
+                  <option  value="Short coat">Short coat</option>
+                  <option  value="Long coat">Long coat</option>
+                  <option  value="No preferences">No preferences</option>
+              </select>
+              </div>
+              </div>
+            <br>
+            <div class="form-group">
+            <label class="label" for="gender2"> Gender:</label>
+            <div class="custom-select" style="width:150px;">
+            <select id="gender2" name="gender2">
+                <option value="{{ gender }}">{{ gender }}</option>
+                <option  value="Female">Female</option>
+                <option  value="Male">Male</option>
+                <option  value="No preferences">No preferences</option>
+            </select>
+            </div>
+            </div>
+            <br>
+            <div class="form-group">
+            <label class="label" for="age2"> Age:</label>
+            <input type="number" id="age2" name="age2" min="1" value="{{ age }}">
+            <div class="custom-select" style="width:150px;">
+            <select id="type_age2" name="type_age2">
+                <option value="{{ type_age }}">{{ type_age }}</option>
+                <option  value="Weeks">Weeks</option>
+                <option  value="Months">Months</option>
+                <option  value="Years">Years</option>
+                <option  value="No preferences">No preferences</option>
+            </select>
+        </div>
+        </div>
+
+        <label class="label">Housing environment: </label><br>
+        <input type="text" id="housingEnv" name="housingEnv" value="{{ housingEnv }}" style="width: 500px;"><br>
+        <input type="checkbox" id="hh1" name="housing2" value="Apartament">
+        <label class="label" for="hh1"> Apartament </label><br>
+        <input type="checkbox" id="hh2" name="housing2" value="House">
+        <label class="label" for="hh2"> House</label><br>
+        <input type="checkbox" id="hh3" name="housing2" value="Courtyard">
+        <label class="label" for="hh3"> Courtyard</label>
+    <br><br>
+
+    <label class="label">Experience and history: </label><br>
+    <input type="text" id="experience" name="experience" value="{{ experience }}" style="width: 500px;"><br>
+    <input type="checkbox" id="eh12" name="exp_his2" value="Had cats">
+    <label class="label" for="eh12"> Had cats </label><br>
+    <input type="checkbox" id="eh22" name="exp_his2" value="Had dogs">
+    <label class="label" for="eh22"> Had dogs</label><br>
+    <input type="checkbox" id="eh32" name="exp_his2" value="I have dogs">
+    <label class="label" for="eh32"> I have dogs</label>
+    <input type="checkbox" id="eh42" name="exp_his2" value="I have cats">
+    <label class="label" for="eh42"> I have cats</label>
+    <br><br>
+
+        <label class="label">Description: </label><br>
+        <input type="text" id="description2" name="description2" value="{{ description }}" style="width: 500px;"><br>
+        <input type="checkbox" id="d11" name="details2" value="Good with other animals">
+        <label class="label" for="d11"> Good with other animals</label><br>
+        <input type="checkbox" id="d22" name="details2" value="Good with kids">
+        <label class="label" for="d22"> Good with kids</label><br>
+        <input type="checkbox" id="d33" name="details2" value="Poty trained">
+        <label class="label" for="d33"> Poty trained</label>
+        <input type="checkbox" id="d44" name="details2" value="Active">
+        <label class="label" for="d44"> Active</label>
+        <input type="checkbox" id="d55" name="details2" value="Does not shed much">
+        <label class="label" for="d55"> Does not shed much</label>
+        <br><br>
+        <button type="submit" class="button2">Submit changes</button>
+    </form>
+    </div>
+    {% endif %}
+
+    {%if upi == 1%}
+    <div class="rightbar">
+      <h3>Update personal information</h3>
+    <form method="post" action="{% url 'updatePersonalInfo' %}">
+      
+      {% csrf_token %}
+      <br>
+      <div class="form-group">
+          <label class="label" for="lastname2">Last name: </label>
+          <input type="text" id="lastname2" name="lastname2" value="{{ lastname }}"><br>
+      </div>
+      <div class="form-group">
+          <label class="label" for="firstname2">First name: </label>
+          <input type="text" id="firstname2" name="firstname2" value="{{ firstname }}"><br>
+      </div>
+      <div class="form-group">
+          <label class="label" for="email2">Email: </label>
+          <input type="email" id="email2" name="email2" value="{{ email }}"><br>
+      </div>
+      <div class="form-group">
+          <label class="label" for="phone2">Phone number: </label>
+          <input type="text" id="phone2" name="phone2" value="{{ phone }}"><br>
+      </div>
+      <div class="form-group">
+          <label class="label" for="password2">Change password: </label>
+          <input type="password" id="password2" name="password2"><br>
+          <label class="label" for="password3">Confirm password: </label>
+          <input type="password" id="password3" name="password3">
+      </div>
+      <br>
+      <button type="submit" class="button2">Submit changes</button>
+    </form>
+  </div>
+    {% endif %}
+
+    {% if paav == 1 %}
+      <div class="rightbar">
+        <h3>Post an anouncement</h3>
+        <form method="post" action = "{% url 'postAnAnnouncement' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+        <div class="form-group">
+
+        <label class="label" for="path">Picture:</label>
+        <input type="file" name="path" id="path" required><br>
+
+        <label class="label" for="name_animal">Name:</label>
+        <input type="text" name="name_animal" id="name_animal" ><br>
+
+        <label class="label" for="animal3"> Animal:</label>
+        <div class="custom-select" style="width:150px;">
+        <select id="animal3" name="animal3">
+            <option value="">Select</option>
+            <option value="Dog">Dog</option>
+            <option  value="Cat">Cat</option>
+        </select>
+    </div>
+    </div>
+        <br>
+        <label class="label" for="breed3">Breed: </label>
+        <input type="text" id="breed3" name="breed3">
+        <br>
+        <div class="form-group">
+        <label class="label" for="size3"> Size:</label>
+        <div class="custom-select" style="width:150px;">
+        <select id="size3" name="size3">
+            <option value="">Select</option>
+            <option value="Small">Small</option>
+            <option  value="Medium">Medium</option>
+            <option  value="Large">Large</option>
+        </select>
+        </div>
+        </div>
+        <br>
+        <div class="form-group">
+            <label class="label" for="hair3"> Hair:</label>
+            <div class="custom-select" style="width:150px;">
+            <select id="hair3" name="hair3">
+                <option value="">Select</option>
+                <option value="Short coat">Short coat</option>
+                <option  value="Long coat">Long coat</option>
+            </select>
+            </div>
+            </div>
+            <br>
+        <div class="form-group">
+        <label class="label" for="gender3"> Gender:</label>
+        <div class="custom-select" style="width:150px;">
+        <select id="gender3" name="gender3">
+            <option value="">Select</option>
+            <option  value="Female">Female</option>
+            <option  value="Male">Male</option>
+        </select>
+        </div>
+        </div>
+        <br>
+        <label class="label" for="weight"> Weight:</label>
+        <input type="number" id="weight" name="weight" min="1">
+        <br>
+        <div class="form-group">
+        <label class="label" for="age3"> Age:</label>
+        <input type="number" id="age3" name="age3" min="1">
+        <div class="custom-select" style="width:150px;">
+        <select id="type_age3" name="type_age3">
+            <option value="">Select</option>
+            <option  value="Weeks">Weeks</option>
+            <option  value="Months">Months</option>
+            <option  value="Years">Years</option>
+        </select>
+    </div>
+    </div>
+    <label class="label">Details: </label>
+    <input type="checkbox" id="d13" name="details3" value="Good with other animals">
+    <label class="label" for="d13"> Good with other animals</label><br>
+    <input type="checkbox" id="d23" name="details3" value="Good with kids">
+    <label class="label" for="d23"> Good with kids</label><br>
+    <input type="checkbox" id="d33" name="details3" value="Poty trained">
+    <label class="label" for="d33"> Poty trained</label>
+    <input type="checkbox" id="d43" name="details3" value="Active">
+    <label class="label" for="d43"> Active</label>
+    <input type="checkbox" id="d53" name="details3" value="Does not shed much">
+    <label class="label" for="d53"> Does not shed much</label>
+
+        <br><br><br>
+        <button type="submit" class="button2">Submit</button>
+        <br>
+    </form> 
+    </div>
+
+    {% endif %}
+
+    {% if uaiv == 1 %}
+    <div class="rightbar">
+
+      <h3>Update animal information</h3>
+        <form method="post" action="{% url 'updateAnimalInfo' idAnimal=idAnimal %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+        <img class="imgg2" src="{{ path.url }}" width="150" height="175" alt="{{ name2 }}"><br>
+        <label class="label" for="path2">Picture:</label>
+        <input type="file" name="path2" id="path2"><br>
+
+        <label class="label" for="name_animal2">Name:</label>
+        <input type="text" name="name_animal2" id="name_animal2" value="{{ name2 }}"><br>
+
+        <label class="label" for="animal4"> Animal:</label>
+        <div class="custom-select" style="width:150px;">
+        <select id="animal4" name="animal4">
+            <option value="{{ animal }}"> {{ animal }}</option>
+            <option value="Dog">Dog</option>
+            <option  value="Cat">Cat</option>
+        </select>
+    </div>
+    </div>
+        <br>
+        <label class="label" for="breed4">Breed: </label>
+        <input type="text" id="breed4" name="breed4" value="{{ race }}">
+        
+        <br>
+        <div class="form-group">
+        <label class="label" for="size4"> Size:</label>
+        <div class="custom-select" style="width:150px;">
+        <select id="size4" name="size4">
+            <option value="{{ size }}">{{ size }}</option>
+            <option value="Small">Small</option>
+            <option  value="Medium">Medium</option>
+            <option  value="Large">Large</option>
+        </select>
+        </div>
+        </div>
+        <br>
+        <div class="form-group">
+            <label class="label" for="hair4"> Hair:</label>
+            <div class="custom-select" style="width:150px;">
+            <select id="hair4" name="hair4">
+                <option value="{{ hair }}">{{ hair }}</option>
+                <option value="Short coat">Short coat</option>
+                <option  value="Long coat">Long coat</option>
+            </select>
+            </div>
+            </div>
+            <br>
+        <div class="form-group">
+        <label class="label" for="gender4"> Gender:</label>
+        <div class="custom-select" style="width:150px;">
+        <select id="gender4" name="gender4">
+            <option value="{{ gender }}">{{ gender }}</option>
+            <option  value="Female">Female</option>
+            <option  value="Male">Male</option>
+        </select>
+        </div>
+        </div>
+        <br>
+        <label class="label" for="weight2"> Weight:</label>
+        <input type="number" id="weight2" name="weight2" min="1" value="{{ weight }}">
+        <br>
+        <div class="form-group">
+        <label class="label" for="age4"> Age:</label>
+        <input type="number" id="age4" name="age4" min="1" value="{{ age }}">
+        <div class="custom-select" style="width:150px;">
+        <select id="type_age4" name="type_age4">
+            <option value="{{ type_age }}">{{ type_age }}</option>
+            <option  value="Weeks">Weeks</option>
+            <option  value="Months">Months</option>
+            <option  value="Years">Years</option>
+        </select>
+    </div>
+    </div>
+
+    <label class="label">Did {{ name2 }} get adopted? </label><br>
+    <input type="radio" id="adopted" name="adopt" value="Yes">
+    <label class="label" for="adopted"> Yes</label><br>
+    <input type="radio" id="not_adopted" name="adopt" value="No">
+    <label class="label" for="not_adopted"> Not yet</label><br>
+
+    <label class="label">Details: </label><br>
+    <input type="text" id="desc2" name="desc2" value="{{ description }}" style="width: 500px;"><br>    
+    <input type="checkbox" id="d14" name="details4" value="Good with other animals">
+    <label class="label" for="d14"> Good with other animals</label><br>
+    <input type="checkbox" id="d24" name="details4" value="Good with kids">
+    <label class="label" for="d24"> Good with kids</label><br>
+    <input type="checkbox" id="d34" name="details4" value="Poty trained">
+    <label class="label" for="d34"> Poty trained</label>
+    <input type="checkbox" id="d44" name="details4" value="Active">
+    <label class="label" for="d44"> Active</label>
+    <input type="checkbox" id="d54" name="details4" value="Does not shed much">
+    <label class="label" for="d54"> Does not shed much</label>
+
+        <br><br><br>
+        <button type="submit" class="button2">Submit</button>
+        <br>
+    </form> 
+    <br>
+     <form method="post" action="{% url 'deleteAnimal' idAnimal=idAnimal%}">
+      {% csrf_token %}
+      <button type="submit" class="button2" id="deleteBtn">Delete</button>
+     </form>
+
+    </div>
+    {% endif %}
+
+    {% if caa == 1 %}
+
+      {% if mesaj4 %}
+      {% if mesaj4.strip %}
+        <h2 class="pp"> {{ mesaj4 }} </h2>
+      {% endif %}
+    {% endif %}
+    <div class="rightbarMessage">
+     
+      <p>{{ sender }} </p>
+      <div class="messageForm">
+      <form action="{% url 'sendMessageBack' idAnimal=idAnimal%}" method="post">
+      {% if user.role == 0 and check != 1 and check != 0%}
+      <label class="label" for="location"> Location</label>
+      <input type="text" id="location" name="location" value="{{ address }}" style="width: 300px;">
+      <p> Suggestion : <strong>{{ latest_message }}</strong></p>
+      {% elif user.role == 1 and check != 1 and check != 0%}
+      <p>Location : <strong>{{ address }}</strong> </p>
+      <p>{{ latest_message }}</p>
+      {% endif %}
+    {% if check == 1 %}
+    <p>The meeting was set : {{ latest_message }}</p>
+    <p>Location : <strong>{{ address }}</strong> </p>
+    {% elif check == 0 %}
+    <p>New date/time suggestion : {{ latest_message }}</p>
+    <p>New location suggestion : <strong>{{ address }}</strong> </p>
+    <p>Waiting for an answear...</p>
+      {% elif check == 2 %}
+    
+      {% csrf_token %}
+      
+      <input type="radio" id="accept" name="accept" value="Accept" onclick="showFields2('accept_fields')">
+      <label class="label" for="accept"> Accept</label><br>
+      <input type="radio" id="decline" name="accept" value="Decline" onclick="showFields('accept_fields')">
+      <label class="label" for="decline"> Decline</label><br>
+      <div id="accept_fields" style="display: none;">  
+        <label for="endDate2">Date</label>
+            <input type="date" id="endDate2" name="endDate2"><br>
+            <label for="endTime2">Time</label>
+            <input type="time" id="startTime2" name="startTime2">
+            <input type="time" id="endTime2" name="endTime2">
+      </div>
+      
+      <button type="submit" class="button2" >Send</button>
+    </form>
+    {% else %}
+    <p>Waiting for an answear...</p>
+  </div>
+  {% endif %}
+    {% endif %}
+  </div>
+    </main>
+    <br> <br>
+    <script>
+        var x, i, j, l, ll, selElmnt, a, b, c;
+        x = document.getElementsByClassName("custom-select");
+        l = x.length;
+        for (i = 0; i < l; i++) {
+          selElmnt = x[i].getElementsByTagName("select")[0];
+          ll = selElmnt.length;
+          a = document.createElement("DIV");
+          a.setAttribute("class", "select-selected");
+          a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+          x[i].appendChild(a);
+          b = document.createElement("DIV");
+          b.setAttribute("class", "select-items select-hide");
+          for (j = 1; j < ll; j++) {
+          
+            c = document.createElement("DIV");
+            c.innerHTML = selElmnt.options[j].innerHTML;
+            c.addEventListener("click", function(e) {
+               
+                var y, i, k, s, h, sl, yl;
+                s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                sl = s.length;
+                h = this.parentNode.previousSibling;
+                for (i = 0; i < sl; i++) {
+                  if (s.options[i].innerHTML == this.innerHTML) {
+                    s.selectedIndex = i;
+                    h.innerHTML = this.innerHTML;
+                    y = this.parentNode.getElementsByClassName("same-as-selected");
+                    yl = y.length;
+                    for (k = 0; k < yl; k++) {
+                      y[k].removeAttribute("class");
+                    }
+                    this.setAttribute("class", "same-as-selected");
+                    break;
+                  }
+                }
+                h.click();
+            });
+            b.appendChild(c);
+          }
+          x[i].appendChild(b);
+          a.addEventListener("click", function(e) {
+             
+              e.stopPropagation();
+              closeAllSelect(this);
+              this.nextSibling.classList.toggle("select-hide");
+              this.classList.toggle("select-arrow-active");
+            });
+        }
+        function closeAllSelect(elmnt) {
+        
+          var x, y, i, xl, yl, arrNo = [];
+          x = document.getElementsByClassName("select-items");
+          y = document.getElementsByClassName("select-selected");
+          xl = x.length;
+          yl = y.length;
+          for (i = 0; i < yl; i++) {
+            if (elmnt == y[i]) {
+              arrNo.push(i)
+            } else {
+              y[i].classList.remove("select-arrow-active");
+            }
+          }
+          for (i = 0; i < xl; i++) {
+            if (arrNo.indexOf(i)) {
+              x[i].classList.add("select-hide");
+            }
+          }
+        }
+        
+        document.addEventListener("click", closeAllSelect);
+
+        function showFields(id) {
+        var fields = document.getElementById(id);
+        if (fields.style.display === "none") {
+            fields.style.display = "block";
+        }
+    }
+    function showFields2(id) {
+        var fields = document.getElementById(id);
+        if (fields.style.display === "block") {
+            fields.style.display = "none";
+        }
+      }
+        </script>
+{% endblock %}
+
+</body>
+</html>

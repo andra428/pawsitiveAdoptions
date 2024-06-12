@@ -1,0 +1,32 @@
+{% extends "home.html" %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+  
+</head>
+<body>
+  
+{% block content %}
+    
+    <main>
+      
+         
+    <div class="leftbar">
+        <h2>Considering for adoption?</h2>
+        <button>Check if it's a match!</button>
+    </div>
+        <div class="rightbar">
+            <a href="https://cainidecompanie.wordpress.com/2015/06/28/cele-mai-iubite-10-rase/">Cele mai iubite 10 rase</a>
+        </div>
+        <br> <br>
+    </main>
+    <br> <br>
+{% endblock %}
+
+</body>
+</html>

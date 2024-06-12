@@ -1,0 +1,121 @@
+{% extends "home.html" %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+  
+</head>
+<body>
+  
+{% block content %}
+<div id="stars" data-stars="{{ stars }}"></div>
+    <main>
+      <div class="center">
+        <h1>{{ scoreText }}</h1>
+    </div>
+    
+      <table class="tableScore">
+        <tr class="trScore">
+          <th class="thScore">Characteristics</th>
+          <th class="thScore">{{ username }}</th>
+          <th class="thScore">{{ petName }}</th>
+          <th class="thScore">Score</th>
+        </tr>
+        {% if pets %}
+    
+        {% for pet in pets %}
+        <tr class="trScore">
+          <td class="tdScore"> Animal</td>
+          <td class="tdScore"> {{ user.animal }}</td>
+          <td class="tdScore"> {{ pet.animal }}</td>
+          <td class="stars2"> </td>
+        </tr>
+        <tr class="trScore">
+          <td class="tdScore"> Breed </td>
+          <td class="tdScore"> {{ user.race}}</td>
+          <td class="tdScore"> {{ pet.race }}</td>
+          <td class="stars2"> </td>
+        </tr>
+        <tr class="trScore">
+          <td class="tdScore"> Age </td>
+          <td class="tdScore"> {{ age }} {{ type_age }}</td>
+          <td class="tdScore"> {{ pet.age }} {{ pet.type_age }}</td>
+          <td class="stars2"> </td>
+        </tr>
+        <tr class="trScore">
+          <td class="tdScore"> Size</td>
+          <td class="tdScore"> {{ size }}</td>
+          <td class="tdScore"> {{ pet.size }}</td>
+          <td class="stars2"> </td>
+        </tr>
+        <tr class="trScore">
+          <td class="tdScore"> Hair</td>
+          <td class="tdScore"> {{ hair }}</td>
+          <td class="tdScore"> {{ pet.hair }}</td>
+          <td class="stars2"> </td>
+        </tr>
+        <tr class="trScore">
+          <td class="tdScore"> Gender</td>
+          <td class="tdScore"> {{ gender }}</td>
+          <td class="tdScore"> {{ pet.gender }}</td>
+          <td class="stars2"> </td>
+        </tr>
+        <tr class="trScore">
+          <td class="tdScore"> Description</td>
+          <td class="tdScore"> {{ user.description }}</td>
+          <td class="tdScore"> {{ pet.description }}</td>
+          <td class="stars2"> </td>
+        </tr>
+        <tr class="trScore">
+          <td class="tdScore"> Housing environment</td>
+          <td class="tdScore"> {{ user.housing_environment }}</td>
+          <td class="tdScore"> </td>
+          <td class="stars2"></td>
+        </tr>
+        <tr class="trScore">
+          <td class="tdScore"> Experience/history </td>
+          <td class="tdScore"> {{ user.experience_history }}</td>
+          <td class="tdScore"> </td>
+          <td class="stars2"></td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+      </table><br>
+      <form action="{% url 'ForwardAdopting' score=score idAnimal=idAnimal%}" method="post">
+        {% csrf_token %}
+        <div class="center">
+          <br>
+          <p>Continue to the next step and send a message to the animal owner expressing your interest in adopting {{ petName }}</p><br>
+          <button type="submit" class="buttonForward">Forward</button>
+      </div>
+    </form>
+    </main>
+
+    <script>
+    
+    window.onload = function() {
+    var stars = JSON.parse(document.getElementById('stars').getAttribute('data-stars'));
+    console.log(stars);
+    displayStars(stars);
+};
+
+function displayStars(stars) {
+    var starsDivs = document.getElementsByClassName("stars2");
+    for (var i = 0; i < starsDivs.length; i++) {
+        starsDivs[i].innerHTML = "";
+
+        for (var j = 0; j < stars[i]; j++) {
+            starsDivs[i].innerHTML += '<span style="font-size:20px;">&#9734;</span>';
+        }
+    }
+}
+    </script>
+    <br> <br>
+  </body>
+{% endblock %}
+
+</html>
